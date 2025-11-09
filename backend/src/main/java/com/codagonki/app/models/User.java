@@ -1,15 +1,17 @@
 package com.codagonki.app.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")  
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -35,12 +35,12 @@ public class UserService {
                 "Пользователь с таким email уже существует"
             );
         }
-        User user = new User();
-        user.setEmail(signupRequest.getEmail());
-        user.setHashedPassword(passwordEncoder.encode(signupRequest.getPassword()));
-        user.setNickname(signupRequest.getNickname());
-        user.setRole("USER"); 
-        
+        User user = User.builder()
+            .email(signupRequest.getEmail())
+            .hashedPassword(passwordEncoder.encode(signupRequest.getPassword()))
+            .nickname(signupRequest.getNickname())
+            .role("USER")
+            .build();
         return userRepository.save(user);
     }
     
