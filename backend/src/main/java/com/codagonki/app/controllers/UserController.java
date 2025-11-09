@@ -1,19 +1,37 @@
-    package com.codagonki.app.controllers;
+package com.codagonki.app.controllers;
 
-    import org.springframework.web.bind.annotation.GetMapping;
-    import org.springframework.web.bind.annotation.PathVariable;
-    import org.springframework.web.bind.annotation.RequestMapping;
-    import org.springframework.web.bind.annotation.RestController;
+import com.codagonki.app.DTO.SignupRequest;
+import com.codagonki.app.models.User;
+import com.codagonki.app.services.UserService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-    import com.codagonki.app.DTO.UserResponse;
+import java.util.HashMap;
+import java.util.Map;
 
-    @RestController
-    @RequestMapping(path = "api/users")
-    public class UserController {
-
-        @GetMapping("/{user_id}")
-        public UserResponse user_ping(@PathVariable int user_id) {
-            return new UserResponse(user_id);
-        }
-
+@RestController
+@RequestMapping("/api/users")
+@CrossOrigin(origins = "*")
+public class UserController {
+    private final UserService userService;
+    
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
+    
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
+        User user = userService.registerUser(signupRequest);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Пользователь успешно зарегистрирован");
+        response.put("userId", user.getId());
+        response.put("email", user.getEmail());
+        response.put("nickname", user.getNickname());
+        response.put("role", user.getRole());
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+}
