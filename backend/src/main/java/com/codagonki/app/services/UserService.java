@@ -23,20 +23,18 @@ public class UserService {
     }
     
     public User registerUser(SignupRequest signupRequest) {
-        if (userRepository.existsByEmail(signupRequest.getEmail())) {
-            throw new ResponseStatusException(
-                HttpStatus.CONFLICT, 
-                "Пользователь с таким email уже существует"
-            );
-        }
-        
         if (!signupRequest.getPassword().equals(signupRequest.getVerifyPassword())) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, 
                 "Пароли не совпадают"
             );
         }
-        
+        if (userRepository.existsByEmail(signupRequest.getEmail())) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT, 
+                "Пользователь с таким email уже существует"
+            );
+        }
         User user = new User();
         user.setEmail(signupRequest.getEmail());
         user.setHashedPassword(passwordEncoder.encode(signupRequest.getPassword()));
