@@ -29,7 +29,10 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         TokenResponse tokenResponse = userService.authenticateUser(loginRequest);
-        return ResponseEntity.ok(tokenResponse);
+        return ResponseEntity.ok()
+            .header("alg", "HS256")
+            .header("typ", "JWT")
+            .body(tokenResponse);
     }
 
 }

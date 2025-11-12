@@ -27,13 +27,15 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + jwtProperties.getAccessTokenExpiration());
         
         return Jwts.builder()
-                .setSubject(user_id.toString()) 
-                .claim("role", role)
-                .claim("user_id", user_id) 
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
+            .setHeaderParam("alg", "HS256") 
+            .setHeaderParam("typ", "JWT")   
+            .setSubject(user_id.toString()) 
+            .claim("role", role)
+            .claim("user_id", user_id) 
+            .setIssuedAt(now)
+            .setExpiration(expiryDate)
+            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .compact();
     }
 
     public String generateRefreshToken(Long user_id) {
@@ -41,12 +43,14 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + jwtProperties.getRefreshTokenExpiration());
         
         return Jwts.builder()
-                .setSubject(user_id.toString())
-                .claim("type", "refresh")
-                .claim("user_id", user_id)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
+            .setHeaderParam("alg", "HS256") 
+            .setHeaderParam("typ", "JWT")  
+            .setSubject(user_id.toString())
+            .claim("type", "refresh")
+            .claim("user_id", user_id)
+            .setIssuedAt(now)
+            .setExpiration(expiryDate)
+            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .compact();
     }
 }
