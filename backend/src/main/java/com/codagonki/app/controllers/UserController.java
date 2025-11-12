@@ -1,8 +1,9 @@
 package com.codagonki.app.controllers;
 
+import com.codagonki.app.DTO.LoginRequest;
 import com.codagonki.app.DTO.SignupRequest;
+import com.codagonki.app.DTO.TokenResponse;
 import com.codagonki.app.DTO.UserResponse;
-import com.codagonki.app.models.User;
 import com.codagonki.app.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,14 +22,14 @@ public class UserController {
     
     @PostMapping("/signup")
     public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
-        User user = userService.registerUser(signupRequest);
-        
-        UserResponse response = UserResponse.builder()
-            .userId(user.getId())
-            .email(user.getEmail())
-            .role(user.getRole())
-            .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        UserResponse user = userService.registerUser(signupRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
+        TokenResponse tokenResponse = userService.authenticateUser(loginRequest);
+        return ResponseEntity.ok(tokenResponse);
     }
 
 }

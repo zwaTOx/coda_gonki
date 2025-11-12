@@ -1,8 +1,13 @@
 package com.codagonki.app.services;
 
+import com.codagonki.app.DTO.LoginRequest;
 import com.codagonki.app.DTO.SignupRequest;
+import com.codagonki.app.DTO.TokenResponse;
+import com.codagonki.app.DTO.UserResponse;
 import com.codagonki.app.models.User;
 import com.codagonki.app.repositories.UserRepository;
+import com.codagonki.app.utils.JwtTokenProvider;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,13 +21,17 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public UserService(UserRepository userRepository, 
+                      PasswordEncoder passwordEncoder,
+                      JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
-    
-    public User registerUser(SignupRequest signupRequest) {
+
+    public UserResponse registerUser(SignupRequest signupRequest) {
         if (!signupRequest.getPassword().equals(signupRequest.getVerifyPassword())) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, 
@@ -41,9 +50,40 @@ public class UserService {
             .nickname(signupRequest.getNickname())
             .role("USER")
             .build();
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        return UserResponse.builder()
+            .userId(savedUser.getId())
+            .email(savedUser.getEmail())
+            .role(savedUser.getRole())
+            .build();
     }
     
+    public TokenResponse authenticateUser(LoginRequest loginRequest) {
+        Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
+
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED,
+                "Пользователь с таким email не существует"
+            );
+        }
+        User user = userOptional.get();
+        
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getHashedPassword())) {
+            throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED,
+                "Неверный пароль"
+            );
+        }
+        String access_token = jwtTokenProvider.generateAccessToken(user.getId(), user.getRole());
+        String refresh_token = jwtTokenProvider.generateRefreshToken(user.getId());
+        return TokenResponse.builder()
+            .accessToken(access_token)
+            .refreshToken(refresh_token)
+            .tokenType("Bearer")
+            .build();
+        }
+
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
