@@ -1,9 +1,15 @@
 package com.codagonki.app.utils;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.codagonki.app.config.JwtProperties;
 
@@ -52,5 +58,32 @@ public class JwtTokenProvider {
             .setExpiration(expiryDate)
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)
             .compact();
+    }
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Токен просрочен");
+        } catch (MalformedJwtException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Неверный формат токена");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Некорректный токен");
+        }
+    }
+    
+    public Claims getTokenClaims(String token) {
+        try {
+            return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Некорректный токен");
+        }
     }
 }

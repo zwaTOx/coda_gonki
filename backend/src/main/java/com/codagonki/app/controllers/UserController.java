@@ -3,6 +3,7 @@ package com.codagonki.app.controllers;
 import com.codagonki.app.DTO.LoginRequest;
 import com.codagonki.app.DTO.SignupRequest;
 import com.codagonki.app.DTO.TokenResponse;
+import com.codagonki.app.DTO.UserProfileResponse;
 import com.codagonki.app.DTO.UserResponse;
 import com.codagonki.app.services.UserService;
 import jakarta.validation.Valid;
@@ -11,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users/")
 @CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
@@ -33,6 +34,12 @@ public class UserController {
             .header("alg", "HS256")
             .header("typ", "JWT")
             .body(tokenResponse);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserProfileResponse> getCurrentUser(@RequestHeader("Authorization") String authorizationHeader) {
+        UserProfileResponse userInfo = userService.getUserInfo(authorizationHeader);
+        return ResponseEntity.ok(userInfo);
     }
 
 }

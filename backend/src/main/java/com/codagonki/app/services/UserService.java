@@ -3,10 +3,14 @@ package com.codagonki.app.services;
 import com.codagonki.app.DTO.LoginRequest;
 import com.codagonki.app.DTO.SignupRequest;
 import com.codagonki.app.DTO.TokenResponse;
+import com.codagonki.app.DTO.UserProfileResponse;
 import com.codagonki.app.DTO.UserResponse;
 import com.codagonki.app.models.User;
 import com.codagonki.app.repositories.UserRepository;
 import com.codagonki.app.utils.JwtTokenProvider;
+import com.codagonki.app.utils.JwtUtils;
+
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,18 +22,20 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-
-    public UserService(UserRepository userRepository, 
-                      PasswordEncoder passwordEncoder,
-                      JwtTokenProvider jwtTokenProvider) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    private final JwtUtils jwtUtils;
+    
+    // public UserService(UserRepository userRepository, 
+    //                   PasswordEncoder passwordEncoder,
+    //                   JwtTokenProvider jwtTokenProvider) {
+    //     this.userRepository = userRepository;
+    //     this.passwordEncoder = passwordEncoder;
+    //     this.jwtTokenProvider = jwtTokenProvider;
+    // }
 
     public UserResponse registerUser(SignupRequest signupRequest) {
         if (!signupRequest.getPassword().equals(signupRequest.getVerifyPassword())) {
@@ -83,7 +89,16 @@ public class UserService {
             .tokenType("Bearer")
             .build();
         }
-
+    
+    public UserProfileResponse getUserInfo(String authorizationHeader) {
+        User user = jwtUtils.getUserFromAuthorizationHeader(authorizationHeader);
+        return UserProfileResponse.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .role(user.getRole())
+                .build();
+    }
+    
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
