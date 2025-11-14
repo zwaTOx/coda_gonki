@@ -5,6 +5,11 @@
     initial-value: #130F40;
 }
 
+@property --gray-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #8E8E8E;  
+}
 @property --blue-color {
     syntax: "<color>";
     inherits: false;
