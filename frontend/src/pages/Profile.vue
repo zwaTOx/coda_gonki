@@ -2,9 +2,7 @@
 </script>
 
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+    <div>Profile</div>
 </template>
 
 <style scoped>
