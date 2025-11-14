@@ -7,5 +7,11 @@
   </div>
 </template>
 
-<style scoped>
+<style>
+:root {
+  font-size: 24px;
+}
+body {
+  margin: 0;
+}
 </style>
