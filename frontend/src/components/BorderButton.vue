@@ -24,7 +24,15 @@ const props = defineProps({
 
     width: max-content;
     padding: 0.25rem 0.5rem;
+    transition: all 0.3s;
 
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 25%);
+    user-select: none;
+
+    &:hover {
+        transform: translate(0px, 2px);
+        transition: all 0.1s;
+        cursor: pointer;
+    }
 }
 </style>

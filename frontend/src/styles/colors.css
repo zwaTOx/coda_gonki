@@ -65,7 +65,7 @@
     initial-value: #178AC9;  
 }
 
-@property --accent-blue-color {
+@property --accent-red-color {
     syntax: "<color>";
     inherits: false;
     initial-value: #FF240A;  

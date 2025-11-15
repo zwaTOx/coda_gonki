@@ -24,6 +24,7 @@ const props = defineProps({
     padding: 10px;
     border-radius: 4px;
 
+    user-select: none;
     transition: all ease-out 0.1s;
 
     &:hover {

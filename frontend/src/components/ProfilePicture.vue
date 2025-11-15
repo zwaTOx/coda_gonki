@@ -43,11 +43,15 @@ const props = defineProps({
     background-color: var(--white-color);
     text-align: center;
     align-content: center;
+    user-select: none;
 
     border-radius: 50%;
 }
 
 .size-48 {
+    min-width: 48px;
+    min-height: 48px;
+
     width: 48px;
     height: 48px;
 
@@ -57,15 +61,21 @@ const props = defineProps({
 }
 
 .size-64 {
+    min-width: 64px;
+    min-height: 64px;
+
     width: 64px;
     height: 64px;
 
     .letters {
-        font-size: 32px;
+        font-size: 24px;
     }
 }
 
 .size-128 {
+    min-width: 128px;
+    min-height: 128px;
+    
     width: 128px;
     height: 128px;
 
@@ -75,8 +85,8 @@ const props = defineProps({
 }
 
 .size-256 {
-    width: 256px;
-    height: 256px;
+    min-width: 256px;
+    min-height: 256px;
 
     .letters {
         font-size: 64px;

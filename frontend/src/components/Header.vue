@@ -6,16 +6,14 @@ import Logo from './Logo.vue';
 </script>
 
 <template>
-    <div class="header-container">
-        <Logo></Logo>
-        <div class="button-container">
-            <HeaderButton :text="'Начать игру'"></HeaderButton>
-            <HeaderButton :text="'Начать игру'"></HeaderButton>
-            <HeaderButton :text="'Начать игру'"></HeaderButton>
-            <HeaderButton :text="'Начать игру'"></HeaderButton>
-            <HeaderButton :text="'Начать игру'"></HeaderButton>
+    <div class="wrapper-case">
+        <div class="header-container">
+            <Logo></Logo>
+            <div class="button-container">
+                <HeaderButton :text="'Начать игру'"></HeaderButton>
+            </div>
+            <HeaderProfileBar></HeaderProfileBar>
         </div>
-        <HeaderProfileBar></HeaderProfileBar>
     </div>
 </template>
 
@@ -23,9 +21,22 @@ import Logo from './Logo.vue';
 @import url('../styles/colors.css');
 @import url('../styles/fonts.css');
 
-.header-container {
+.wrapper-case {
     position: sticky;
     top: 0;
+    display: flex;
+
+    background-color: var(--dark-color);
+    width: 100%;
+
+    z-index: 2;
+    justify-content: center;
+    box-shadow: 2px 2px 2px 1px rgb(0 0 0 / 20%);
+}
+
+.header-container {
+    box-sizing: border-box;
+    width: 1024px;
 
     display: flex;
     align-items: center;
@@ -37,7 +48,6 @@ import Logo from './Logo.vue';
     color: var(--gray-color);
 
     font-size: 1rem;
-    box-shadow: 2px 2px 2px 1px rgb(0 0 0 / 20%);
 }
 
 .button-container {
