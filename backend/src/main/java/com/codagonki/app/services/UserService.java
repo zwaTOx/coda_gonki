@@ -3,6 +3,7 @@ package com.codagonki.app.services;
 import com.codagonki.app.DTO.LoginRequest;
 import com.codagonki.app.DTO.SignupRequest;
 import com.codagonki.app.DTO.TokenResponse;
+import com.codagonki.app.DTO.UpdateProfileRequest;
 import com.codagonki.app.DTO.UserProfileResponse;
 import com.codagonki.app.DTO.UserResponse;
 import com.codagonki.app.models.User;
@@ -100,6 +101,22 @@ public class UserService {
                 .build();
     }
     
+    public UserProfileResponse updateUserProfile(String authorizationHeader, UpdateProfileRequest updateRequest) {
+        User user = jwtUtils.getUserFromAuthorizationHeader(authorizationHeader);
+        if (updateRequest.getNickname() != null && !updateRequest.getNickname().equals(user.getNickname())) {
+            user.setNickname(updateRequest.getNickname());
+        } 
+        
+        User updatedUser = userRepository.save(user);
+        
+        return UserProfileResponse.builder()
+                .email(updatedUser.getEmail())
+                .nickname(updatedUser.getNickname())
+                .role(updatedUser.getRole())
+                .rating(updatedUser.getRating())
+                .build();
+    }
+
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }

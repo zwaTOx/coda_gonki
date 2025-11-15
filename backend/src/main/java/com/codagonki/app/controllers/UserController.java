@@ -3,6 +3,7 @@ package com.codagonki.app.controllers;
 import com.codagonki.app.DTO.LoginRequest;
 import com.codagonki.app.DTO.SignupRequest;
 import com.codagonki.app.DTO.TokenResponse;
+import com.codagonki.app.DTO.UpdateProfileRequest;
 import com.codagonki.app.DTO.UserProfileResponse;
 import com.codagonki.app.DTO.UserResponse;
 import com.codagonki.app.services.UserService;
@@ -40,6 +41,14 @@ public class UserController {
     public ResponseEntity<UserProfileResponse> getCurrentUser(@RequestHeader("Authorization") String authorizationHeader) {
         UserProfileResponse userInfo = userService.getUserInfo(authorizationHeader);
         return ResponseEntity.ok(userInfo);
+    }
+
+    @PatchMapping("/me")
+    public ResponseEntity<UserProfileResponse> updateUserProfile(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @Valid @RequestBody UpdateProfileRequest updateRequest) {
+        UserProfileResponse updatedUser = userService.updateUserProfile(authorizationHeader, updateRequest);
+        return ResponseEntity.ok(updatedUser);
     }
 
 }
