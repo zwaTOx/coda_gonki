@@ -31,4 +31,8 @@ public class User {
     
     @Column(name = "hashed_password")
     private String hashedPassword;  
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer rating = 0;
 }

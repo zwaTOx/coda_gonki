@@ -13,4 +13,5 @@ public class UserProfileResponse {
     private String email;
     private String nickname;
     private String role;
+    private Integer rating;
 }
