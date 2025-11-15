@@ -1,9 +1,11 @@
 package com.codagonki.app.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -12,6 +14,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +31,8 @@ public class User {
     
     @Column(name = "hashed_password")
     private String hashedPassword;  
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer rating = 0;
 }
