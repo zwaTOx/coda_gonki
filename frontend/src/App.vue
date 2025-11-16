@@ -1,11 +1,23 @@
-<script setup></script>
+<script setup>
+import headerComponent from './components/header.vue';
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <headerComponent />
+  <main class="main">
+    <router-view ></router-view>
+  </main>
+  
 </template>
 
-<style scoped></style>
+<script>
+export default {
+  name: 'App',
+  components: { headerComponent },
+  data() {
+    return {
+
+    }
+  }
+}
+</script>
