@@ -8,6 +8,7 @@
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
   color: #fff;
+  user-select: none;
 }
 #app {
   background-color: #130f40;
@@ -15,5 +16,13 @@
 .main {
   max-width: 1012px;
   margin: 0 auto;
-  height: 100vh;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease-in-out;
+}
+.icon:hover {
+  cursor: pointer;
+  transform: scale(1.2);
 }

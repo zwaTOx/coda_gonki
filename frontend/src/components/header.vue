@@ -8,7 +8,7 @@
                 <div class="header__logo--mode">{{ `${mode}` }}</div>
             </div>
             <div class="header__profile">
-                <div class="header__profile--icon">{{ initials }}</div>
+                <div class="header__profile--icon icon">{{ initials }}</div>
                 <div class="header__profile--info">
                     <div class="header__profile--info--name">Константин Денисов</div>
                     <div class="header__profile--info--lvl">{{ `${lvl} уровень (${exp})` }}</div>

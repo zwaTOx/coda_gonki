@@ -37,6 +37,8 @@
 .header__profile--icon {
     background-color: #fff;
     display: flex;
+    width: 48px;
+    height: 48px;
     justify-content: center;
     align-items: center;
     padding: 6px;

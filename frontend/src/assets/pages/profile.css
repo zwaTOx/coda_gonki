@@ -126,6 +126,7 @@
 .stats_card__info--side--value {
     font-size: 28px;
     font-weight: bold;
+    font-style: italic;
 }
 .stats_card__info--side--sign {
     font-size: 12px;
