@@ -11,6 +11,7 @@ spring:
     show-sql: true
 
 jwt:
-  secret: ${JWT_SECRET:rfBd67ti3e6SN8ALjxe3f1e6SN8ALjxe3f1e6SN8ALjxe3f1e6SN8ALjxe3f1e6SN8ALjxe3f1e6SN8ALjxe3f1e6SN8ALjxe3f1}
+  access-token-secret: "your-super-secure-access-token-secret-key-minimum-32-chars"
+  refresh-token-secret: "your-different-super-secure-refresh-token-secret-key"
   access-token-expiration: 900000      # 15 минут в миллисекундах
   refresh-token-expiration: 2592000000 # 30 дней в миллисекундах

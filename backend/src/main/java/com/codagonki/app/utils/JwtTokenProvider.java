@@ -24,9 +24,13 @@ public class JwtTokenProvider {
     public JwtTokenProvider(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
     }
-        private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
-    }
+        private SecretKey getAccessTokenSigningKey() {
+            return Keys.hmacShaKeyFor(jwtProperties.getAccessTokenSecret().getBytes());
+        }
+        
+        private SecretKey getRefreshTokenSigningKey() {
+            return Keys.hmacShaKeyFor(jwtProperties.getRefreshTokenSecret().getBytes());
+        }
 
     public String generateAccessToken(Long user_id, String role) {
         Date now = new Date();
@@ -40,7 +44,7 @@ public class JwtTokenProvider {
             .claim("user_id", user_id) 
             .setIssuedAt(now)
             .setExpiration(expiryDate)
-            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .signWith(getAccessTokenSigningKey(), SignatureAlgorithm.HS256)
             .compact();
     }
 
@@ -56,15 +60,15 @@ public class JwtTokenProvider {
             .claim("user_id", user_id)
             .setIssuedAt(now)
             .setExpiration(expiryDate)
-            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .signWith(getRefreshTokenSigningKey(), SignatureAlgorithm.HS256)
             .compact();
     }
-    public boolean validateToken(String token) {
+    public boolean validateAccessToken(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey())
-                    .build()
-                    .parseClaimsJws(token);
+                .setSigningKey(getAccessTokenSigningKey())
+                .build()
+                .parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Токен просрочен");
@@ -75,10 +79,26 @@ public class JwtTokenProvider {
         }
     }
     
-    public Claims getTokenClaims(String token) {
+    public boolean validateRefreshToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                .setSigningKey(getRefreshTokenSigningKey())
+                .build()
+                .parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Токен просрочен");
+        } catch (MalformedJwtException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Неверный формат токена");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Некорректный токен");
+        }
+    }
+
+    public Claims getAccessTokenClaims(String token) {
         try {
             return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+                .setSigningKey(getAccessTokenSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
