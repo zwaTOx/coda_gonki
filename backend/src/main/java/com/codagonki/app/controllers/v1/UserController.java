@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codagonki.app.DTO.User.UpdateProfileRequest;
 import com.codagonki.app.DTO.User.UserProfileResponse;
+import com.codagonki.app.dependencies.CurrentUser;
 import com.codagonki.app.models.User;
 import com.codagonki.app.services.UserService;
-import com.codagonki.app.utils.JwtUtils;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -22,20 +21,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final JwtUtils jwtUtils; 
 
     @GetMapping("/me")
-    public ResponseEntity<UserProfileResponse> getCurrentUser(HttpServletRequest request) {
-        User user = jwtUtils.getUserFromCookie(request);
+    public ResponseEntity<UserProfileResponse> getCurrentUser(@CurrentUser User user) {
         UserProfileResponse userInfo = userService.getUserInfo(user);
         return ResponseEntity.ok(userInfo);
     }
 
     @PatchMapping("/me")
     public ResponseEntity<UserProfileResponse> updateUserProfile(
-            HttpServletRequest request,
+            @CurrentUser User user,
             @Valid @RequestBody UpdateProfileRequest updateRequest) {
-        User user = jwtUtils.getUserFromCookie(request);
         UserProfileResponse updatedUser = userService.updateUserProfile(user, updateRequest);
         return ResponseEntity.ok(updatedUser);
     }
