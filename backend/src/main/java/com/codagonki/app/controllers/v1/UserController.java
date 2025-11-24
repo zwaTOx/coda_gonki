@@ -1,4 +1,4 @@
-package com.codagonki.app.controllers;
+package com.codagonki.app.controllers.v1;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

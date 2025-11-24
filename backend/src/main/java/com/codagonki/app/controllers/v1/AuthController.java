@@ -1,4 +1,4 @@
-package com.codagonki.app.controllers;
+package com.codagonki.app.controllers.v1;
 
 import com.codagonki.app.DTO.LoginRequest;
 import com.codagonki.app.DTO.SignupRequest;
@@ -38,14 +38,14 @@ public class AuthController {
         TokenResponse tokenResponse = userService.authenticateUser(loginRequest);
         
         Cookie accessTokenCookie = new Cookie("accessToken", tokenResponse.getAccessToken());
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true);
+        accessTokenCookie.setHttpOnly(false);
+        accessTokenCookie.setSecure(false);
         accessTokenCookie.setPath("/");
         accessTokenCookie.setMaxAge((int) TimeUnit.MINUTES.toSeconds(30)); 
         
         Cookie refreshTokenCookie = new Cookie("refreshToken", tokenResponse.getRefreshToken());
         refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setSecure(false);
         refreshTokenCookie.setPath("/auth/refresh"); 
         refreshTokenCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(7)); 
         response.addCookie(accessTokenCookie);     
