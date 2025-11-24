@@ -1,11 +1,11 @@
 package com.codagonki.app.services;
 
-import com.codagonki.app.DTO.LoginRequest;
-import com.codagonki.app.DTO.SignupRequest;
-import com.codagonki.app.DTO.TokenResponse;
-import com.codagonki.app.DTO.UpdateProfileRequest;
-import com.codagonki.app.DTO.UserProfileResponse;
-import com.codagonki.app.DTO.UserResponse;
+import com.codagonki.app.DTO.Auth.LoginRequest;
+import com.codagonki.app.DTO.Auth.SignupRequest;
+import com.codagonki.app.DTO.Auth.TokenResponse;
+import com.codagonki.app.DTO.User.UpdateProfileRequest;
+import com.codagonki.app.DTO.User.UserProfileResponse;
+import com.codagonki.app.DTO.User.UserResponse;
 import com.codagonki.app.models.User;
 import com.codagonki.app.repositories.UserRepository;
 import com.codagonki.app.utils.JwtTokenProvider;

@@ -1,9 +1,9 @@
 package com.codagonki.app.controllers.v1;
 
-import com.codagonki.app.DTO.LoginRequest;
-import com.codagonki.app.DTO.SignupRequest;
-import com.codagonki.app.DTO.TokenResponse;
-import com.codagonki.app.DTO.UserResponse;
+import com.codagonki.app.DTO.Auth.LoginRequest;
+import com.codagonki.app.DTO.Auth.SignupRequest;
+import com.codagonki.app.DTO.Auth.TokenResponse;
+import com.codagonki.app.DTO.User.UserResponse;
 import com.codagonki.app.services.UserService;
 
 import jakarta.servlet.http.Cookie;
