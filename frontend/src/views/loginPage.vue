@@ -3,7 +3,7 @@
         <div class="loginPage">
             <h1 class="loginPage__title">Вход в аккаунт</h1>
             <form class="loginPage__form" @submit.prevent="handleLogin">
-                <input v-model="email" type="email" placeholder="Email" required class="loginPage__form--input" />
+                <input v-model="email" type="text" placeholder="Email" required class="loginPage__form--input" />
                 <input v-model="password" type="password" placeholder="Пароль" required class="loginPage__form--input" />
                 <button type="submit" class="loginPage__form--button">Войти</button>
             </form>

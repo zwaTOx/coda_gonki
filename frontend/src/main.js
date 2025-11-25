@@ -12,7 +12,6 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
-localStorage.clear()
 const auth = authStore()
 auth.initialize()
 

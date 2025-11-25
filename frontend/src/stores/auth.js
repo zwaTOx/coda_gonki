@@ -32,7 +32,7 @@ export const authStore = defineStore('auth', () => {
             isAuth = true;
             console.log('User is authenticated');
         } else {
-            console.log('User is not authenticated');
+            console.log('User is not authenticated', loadFromCache('is_auth'));
         }
     }
 
