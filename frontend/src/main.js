@@ -1,24 +1,19 @@
+import './assets/main.css'
+
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+
 import App from './App.vue'
-import { createRouter, createWebHistory } from 'vue-router';
+import router from './router'
+import { authStore } from '@/stores/auth'
 
-import Profile from './pages/Profile.vue';
-import Home from './pages/Homepage.vue';
-import Authorization from './pages/Authorization.vue';
-import Registration from './pages/Registration.vue';
+const app = createApp(App)
 
-const routes = [
-    { path: '/', component: Home },
-    { path: '/profile', component: Profile },
-    { path: '/authorize', component: Authorization },
-    { path: '/register', component: Registration }
-];
+app.use(createPinia())
+app.use(router)
 
-const router = createRouter({
-    history: createWebHistory(),
-    routes,
-});
+localStorage.clear()
+const auth = authStore()
+auth.initialize()
 
-const app = createApp(App);
-app.use(router);
-app.mount('#app');
+app.mount('#app')

@@ -1,17 +1,23 @@
 <script setup>
+import headerComponent from './components/header.vue';
 </script>
 
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+  <headerComponent />
+  <main class="main">
+    <router-view ></router-view>
+  </main>
+  
 </template>
 
-<style>
-:root {
-  font-size: 24px;
+<script>
+export default {
+  name: 'App',
+  components: { headerComponent },
+  data() {
+    return {
+
+    }
+  }
 }
-body {
-  margin: 0;
-}
-</style>
+</script>
