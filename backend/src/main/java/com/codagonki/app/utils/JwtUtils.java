@@ -10,6 +10,8 @@ import com.codagonki.app.models.User;
 import com.codagonki.app.repositories.UserRepository;
 
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -19,18 +21,17 @@ public class JwtUtils {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     
-    public User getUserFromAuthorizationHeader(String authorizationHeader) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Некорректный формат токена");
+    public User getUserFromCookie(HttpServletRequest request) {
+        String accessToken = getCookieValue(request, "accessToken");
+        if (accessToken == null || accessToken.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Access token не найден в куках");
         }
         
-        String token = authorizationHeader.substring(7);
-        
-        if (!jwtTokenProvider.validateToken(token)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Некорректный токен");
+        if (!jwtTokenProvider.validateAccessToken(accessToken)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Некорректный access token");
         }
         
-        Claims claims = jwtTokenProvider.getTokenClaims(token);
+        Claims claims = jwtTokenProvider.getAccessTokenClaims(accessToken);
         Long userId = claims.get("user_id", Long.class);
         
         Optional<User> userOptional = userRepository.findById(userId);
@@ -39,5 +40,17 @@ public class JwtUtils {
         }
         
         return userOptional.get();
+    }
+
+    private String getCookieValue(HttpServletRequest request, String cookieName) {
+        if (request.getCookies() == null) {
+            return null;
+        }
+        for (Cookie cookie : request.getCookies()) {
+            if (cookieName.equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }

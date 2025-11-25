@@ -1,15 +1,14 @@
 package com.codagonki.app.services;
 
-import com.codagonki.app.DTO.LoginRequest;
-import com.codagonki.app.DTO.SignupRequest;
-import com.codagonki.app.DTO.TokenResponse;
-import com.codagonki.app.DTO.UpdateProfileRequest;
-import com.codagonki.app.DTO.UserProfileResponse;
-import com.codagonki.app.DTO.UserResponse;
+import com.codagonki.app.DTO.Auth.LoginRequest;
+import com.codagonki.app.DTO.Auth.SignupRequest;
+import com.codagonki.app.DTO.Auth.TokenResponse;
+import com.codagonki.app.DTO.User.UpdateProfileRequest;
+import com.codagonki.app.DTO.User.UserProfileResponse;
+import com.codagonki.app.DTO.User.UserResponse;
 import com.codagonki.app.models.User;
 import com.codagonki.app.repositories.UserRepository;
 import com.codagonki.app.utils.JwtTokenProvider;
-import com.codagonki.app.utils.JwtUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,15 +27,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final JwtUtils jwtUtils;
-    
-    // public UserService(UserRepository userRepository, 
-    //                   PasswordEncoder passwordEncoder,
-    //                   JwtTokenProvider jwtTokenProvider) {
-    //     this.userRepository = userRepository;
-    //     this.passwordEncoder = passwordEncoder;
-    //     this.jwtTokenProvider = jwtTokenProvider;
-    // }
 
     public UserResponse registerUser(SignupRequest signupRequest) {
         if (!signupRequest.getPassword().equals(signupRequest.getVerifyPassword())) {
@@ -91,8 +81,7 @@ public class UserService {
             .build();
         }
     
-    public UserProfileResponse getUserInfo(String authorizationHeader) {
-        User user = jwtUtils.getUserFromAuthorizationHeader(authorizationHeader);
+    public UserProfileResponse getUserInfo(User user) {
         return UserProfileResponse.builder()
                 .email(user.getEmail())
                 .nickname(user.getNickname())
@@ -101,8 +90,7 @@ public class UserService {
                 .build();
     }
     
-    public UserProfileResponse updateUserProfile(String authorizationHeader, UpdateProfileRequest updateRequest) {
-        User user = jwtUtils.getUserFromAuthorizationHeader(authorizationHeader);
+    public UserProfileResponse updateUserProfile(User user, UpdateProfileRequest updateRequest) {
         if (updateRequest.getNickname() != null && !updateRequest.getNickname().equals(user.getNickname())) {
             user.setNickname(updateRequest.getNickname());
         } 

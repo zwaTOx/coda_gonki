@@ -1,4 +1,4 @@
-package com.codagonki.app.DTO;
+package com.codagonki.app.DTO.Auth;
 
 import lombok.Builder;
 import lombok.Data;
